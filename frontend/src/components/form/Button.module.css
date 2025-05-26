@@ -1,0 +1,17 @@
+.button_container {
+    width: 80%;
+}
+
+.button_container button {
+    border: none;
+    width: 100%;
+    border-radius: 2em;
+    background-color: #008CBA;
+    color: #fff;
+    padding: 12px 24px;
+    transition: .3s ease;
+}
+
+.button_container button:hover {
+    background-color: #008bbacc;
+}

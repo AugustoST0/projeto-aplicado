@@ -1,0 +1,21 @@
+.top_div {
+    width: fit-content;
+    background-color: #e3f2fd;
+    padding: 3rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.top_div h1 {
+    color: #1565c0;
+    margin-bottom: 1rem;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.top_div p {
+    color: #424242;
+    max-width: 800px;
+    margin: 0 auto;
+}
