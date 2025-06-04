@@ -1,7 +1,8 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function Popup({ title, description, show, handleClose, withButton }) {
+function Popup({ title, description, show, handleClose, withButton, btnText, handleBtn }) {
+
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -9,15 +10,23 @@ function Popup({ title, description, show, handleClose, withButton }) {
             </Modal.Header>
 
             <Modal.Body>
-                <p>{description}</p>
+                {description}
             </Modal.Body>
 
             {withButton && (
-            <Modal.Footer>
-                <Button variant="primary" onClick={handleClose}>
-                    Fechar
-                </Button>
-            </Modal.Footer>
+                <Modal.Footer>
+                    <Button variant={btnText !== '' ? "secondary" : "primary"} onClick={handleClose}>
+                        {btnText !== '' ? "Cancelar" : "Fechar"}
+                    </Button>
+                    {btnText !== '' && (
+                        <Button variant="primary" onClick={() => {
+                            handleBtn();
+                            handleClose();
+                        }}>
+                            {btnText}
+                        </Button>
+                    )}
+                </Modal.Footer>
             )}
         </Modal>
     );

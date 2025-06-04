@@ -2,9 +2,11 @@ import api from '../../../services/api';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePopup } from '../../../contexts/PopupContext';
 
 import CadastroForm from '../../form/CadastroForm';
 import Container from '../../layout/Container';
+import Popup from '../../layout/Popup';
 
 function Cadastro() {
 
@@ -13,13 +15,19 @@ function Cadastro() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const { popupConfig, showCustomPopup, handleClosePopup } = usePopup();
+
     const navigate = useNavigate();
 
     const submit = (e) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            console.log("Senhas diferentes");
+            showCustomPopup({
+                title: 'Senhas não conferem',
+                description: 'As senhas informadas são diferentes. Tente novamente.',
+                withButton: true
+            })
             return;
         }
 
@@ -29,19 +37,37 @@ function Cadastro() {
             password: password,
             role: "USER"
         })
-            .then(() => navigate('/'))
+            .then(() => {
+                showCustomPopup({
+                    title: 'Cadastro realizado',
+                    description: 'O seu cadastro foi bem sucedido',
+                    withButton: true,
+                })
+            })
+            .then(() => navigate('/login'))
             .catch(error => console.error(error))
     }
 
     return (
-        <Container customClass="auth_container" >
-            <CadastroForm
-                handleSubmit={submit}
-                setName={setName}
-                setEmail={setEmail}
-                setPassword={setPassword}
-                setConfirmPassword={setConfirmPassword} />
-        </Container>
+        <>
+            <Container customClass="auth_container" >
+                <CadastroForm
+                    handleSubmit={submit}
+                    setName={setName}
+                    setEmail={setEmail}
+                    setPassword={setPassword}
+                    setConfirmPassword={setConfirmPassword} />
+            </Container>
+            <Popup
+                title={popupConfig.title}
+                description={popupConfig.description}
+                show={popupConfig.show}
+                handleClose={handleClosePopup}
+                withButton={popupConfig.withButton}
+                btnText={popupConfig.btnText}
+                handleBtn={popupConfig.handleBtn}
+            />
+        </>
     )
 }
 

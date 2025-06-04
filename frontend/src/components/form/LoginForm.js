@@ -15,7 +15,7 @@ function LoginForm({ handleSubmit, setEmail, setPassword }) {
             <Input type="email" placeholder="E-mail" sideImg={<FaEnvelope />} setMethod={setEmail} />
             <Input type="password" placeholder="Senha" sideImg={<FaLock />} setMethod={setPassword} />
             <Button value="Enviar" type="submit" />
-            <Link to='/register' >Não possui conta? Cadastre-se</Link>
+            <Link to='/registro' >Não possui conta? Cadastre-se</Link>
         </form>
     )
 }

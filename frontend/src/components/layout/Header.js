@@ -10,7 +10,7 @@ import Container from './Container';
 
 function Header() {
 
-    const { name, logout } = useAuth();
+    const { name, logout, isAuthenticated } = useAuth();
 
     return (
         <Container customClass="header_container">
@@ -23,31 +23,44 @@ function Header() {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item as={Link} to="/produtos">Cardápio</Dropdown.Item>
+                            <Dropdown.Item as={Link} to="/">Cardápio</Dropdown.Item>
                             <Dropdown.Item as={Link} to="/pedido">Pedido</Dropdown.Item>
                             <Dropdown.Item as={Link} to="/contato">Contato</Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/historico">Histórico de pedidos</Dropdown.Item>
-                            <Dropdown.Item onClick={logout} >Logout</Dropdown.Item>
+                            {isAuthenticated ? (
+                                <>
+                                    <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
+                                    <Dropdown.Item as={Link} to="/historico">Histórico de pedidos</Dropdown.Item>
+                                    <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
+                                </>
+                            ) : (
+                                <Dropdown.Item as={Link} to="/login">Faça login</Dropdown.Item>
+                            )}
                         </Dropdown.Menu>
                     </Dropdown>
+
                     <ul className={styles.nav_links}>
-                        <li><Link to="/produtos">Cardápio</Link></li>
+                        <li><Link to="/">Cardápio</Link></li>
                         <li><Link to="/pedido">Pedido</Link></li>
                         <li><Link to="/contato">Contato</Link></li>
-                    </ul>
-                    <Dropdown>
-                        <Dropdown.Toggle as="div" className={styles.user_content} variant="success" id="dropdown-basic">
-                            <FaUserCircle />
-                            <span>{name.toUpperCase()}</span>
-                        </Dropdown.Toggle>
+                        {isAuthenticated ? (
+                            <li>
+                                <Dropdown>
+                                    <Dropdown.Toggle as="div" className={styles.user_content} variant="success" id="dropdown-basic">
+                                        <FaUserCircle />
+                                        <span>{name.toUpperCase()}</span>
+                                    </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                            <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/historico">Histórico de pedidos</Dropdown.Item>
-                            <Dropdown.Item onClick={logout} >Logout</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
+                                        <Dropdown.Item as={Link} to="/historico">Histórico de pedidos</Dropdown.Item>
+                                        <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </li>
+                        ) : (
+                            <li><Link to='/login'>Faça login</Link></li>
+                        )}
+                    </ul>
                 </div>
             </div>
         </Container>

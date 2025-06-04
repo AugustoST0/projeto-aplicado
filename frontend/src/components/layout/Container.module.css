@@ -16,13 +16,17 @@
     justify-content: center;
     align-items: center;
     padding: 2em;
+    margin-top: 12vh;
+    z-index: 0;
 }
 
 .header_container {
-    padding: 1rem 2rem;
+    height: 12vh;
     background-color: #4a90e2;
     color: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    z-index: 999;
 }
 
 .footer_container {

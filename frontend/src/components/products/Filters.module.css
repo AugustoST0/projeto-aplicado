@@ -1,0 +1,13 @@
+.filters_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2em;
+}
+
+.filters_content h1 {
+    color: #1565c0;
+    margin: 1em 0 1em 0;
+    font-size: 1.5em;
+    font-weight: bold;
+}

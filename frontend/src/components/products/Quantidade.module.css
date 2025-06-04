@@ -1,0 +1,12 @@
+.quantity_container {
+    display: flex;
+    gap: 12px;
+}
+
+.quantity_container input {
+    width: 60px;
+}
+
+.quantity_container button {
+    font-weight: 700;
+}

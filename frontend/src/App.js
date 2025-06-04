@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { PopupProvider } from './contexts/PopupContext';
+import { CarrinhoProvider } from './contexts/CarrinhoContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Login from './components/pages/auth/Login';
@@ -15,22 +16,24 @@ import Interceptors from './services/Interceptors';
 function App() {
   return (
     <Router>
-      <PopupProvider>
-        <AuthProvider>
-          <Interceptors />
-          <Container>
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Cadastro />} />
-              <Route element={<Layout />}>
-                <Route path="/produtos" element={<Produtos />} />
-                <Route path="/pedido" element={<Pedido />} />
-                <Route path="/contato" element={<Contato />} />
-              </Route>
-            </Routes>
-          </Container>
-        </AuthProvider>
-      </PopupProvider>
+      <CarrinhoProvider>
+        <PopupProvider>
+          <AuthProvider>
+            <Interceptors />
+            <Container>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/registro" element={<Cadastro />} />
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Produtos />} />
+                  <Route path="/pedido" element={<Pedido />} />
+                  <Route path="/contato" element={<Contato />} />
+                </Route>
+              </Routes>
+            </Container>
+          </AuthProvider>
+        </PopupProvider>
+      </CarrinhoProvider>
     </Router>
   )
 }

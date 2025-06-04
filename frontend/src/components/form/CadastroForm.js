@@ -18,7 +18,7 @@ function CadastroForm({ handleSubmit, setName, setEmail, setPassword, setConfirm
             <Input type="password" placeholder="Senha" sideImg={<FaLock />} setMethod={setPassword} />
             <Input type="password" placeholder="Confirmar senha" sideImg={<FaLock />} setMethod={setConfirmPassword} />
             <Button type="submit" value="Enviar" />
-            <Link to='/'>Já possui conta? Faça login</Link>
+            <Link to='/login'>Já possui conta? Faça login</Link>
         </form>
     )
 }

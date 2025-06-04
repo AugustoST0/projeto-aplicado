@@ -1,0 +1,13 @@
+.date_picker {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    margin: 1em 0 2em 0;
+}
+
+.date_picker input {
+    outline: none;
+    border: 1px solid rgba(169, 169, 169, 0.563);
+    padding: .5em 1em .5em 1em;
+}

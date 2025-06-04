@@ -1,7 +1,11 @@
 package com.example.pa.model.product;
 
+import com.example.pa.model.order.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_product")
@@ -18,15 +22,21 @@ public class Product {
     private String name;
     private String description;
     private Double price;
-    private Integer quantity;
+    private Integer stock;
+
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItemList = new ArrayList<>();
 
     public Product(ProductDTO dto) {
         this.name = dto.name();
         this.description = dto.description();
         this.price = dto.price();
-        this.quantity = dto.quantity();
+        this.stock = dto.stock();
         this.category = dto.category();
     }
+
+
 }

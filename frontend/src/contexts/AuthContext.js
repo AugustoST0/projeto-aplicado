@@ -31,13 +31,13 @@ export const AuthProvider = ({ children }) => {
     const login = (newToken) => {
         setToken(newToken);
         localStorage.setItem('token', newToken);
-        navigate('/produtos');
+        navigate('/');
     };
 
     const logout = () => {
         setToken(null);
-        localStorage.removeItem('token');
-        navigate('/');
+        localStorage.clear();
+        navigate('/login');
     };
 
     const isAuthenticated = !!token;

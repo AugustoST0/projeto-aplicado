@@ -12,7 +12,7 @@ import Popup from '../../layout/Popup';
 function Login() {
 
     const { login } = useAuth();
-    const { showPopup, popupData, handleShowPopup, handleClosePopup } = usePopup();
+    const { popupConfig, showCustomPopup, handleClosePopup } = usePopup();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,9 +28,17 @@ function Login() {
             login(token);
         } catch (error) {
             if (error.response && error.response.status === 403) {
-                handleShowPopup('Erro de Login', 'E-mail ou senha inválidos');
+                showCustomPopup({
+                    title: 'Erro de Login',
+                    description: 'E-mail ou senha inválidos',
+                    withButton: true
+                });
             } else {
-                handleShowPopup('Erro de Conexão', 'Não foi possível conectar ao servidor.');
+                showCustomPopup({
+                    title: 'Erro de Conexão',
+                    description: 'Não foi possível conectar ao servidor',
+                    withButton: true
+                });
             }
         }
     };
@@ -41,11 +49,13 @@ function Login() {
                 <LoginForm handleSubmit={submit} setEmail={setEmail} setPassword={setPassword} />
             </Container>
             <Popup
-                title={popupData.title}
-                description={popupData.description}
-                show={showPopup}
+                title={popupConfig.title}
+                description={popupConfig.description}
+                show={popupConfig.show}
                 handleClose={handleClosePopup}
-                withButton={false}
+                withButton={popupConfig.withButton}
+                btnText={popupConfig.btnText}
+                handleBtn={popupConfig.handleBtn}
             />
         </>
     )

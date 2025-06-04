@@ -1,6 +1,7 @@
 .header_content {
+    height: 12vh;
+    padding: 0 2em 0 2em;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
@@ -28,14 +29,14 @@
     margin-left: 1.5rem;
 }
 
-.nav_links a {
+.nav_links li>a {
     color: white;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
 }
 
-.nav_links a:hover {
+.nav_links li>a:hover {
     color: #e0e0e0;
 }
 

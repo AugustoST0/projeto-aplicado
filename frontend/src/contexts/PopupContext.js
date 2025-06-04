@@ -1,25 +1,45 @@
-import { createContext } from "react";
-import { useState, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const PopupContext = createContext();
 
 export const PopupProvider = ({ children }) => {
+    const [popupConfig, setPopupConfig] = useState({
+        title: '',
+        description: '',
+        show: false,
+        withButton: false,
+        btnText: '',
+        handleBtn: null,
+    })
 
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupData, setPopupData] = useState({ title: '', description: '' });
+    const showCustomPopup = ({
+        title,
+        description,
+        withButton = false,
+        btnText = '',
+        handleBtn = null
+    }) => {
+        setPopupConfig({
+            title,
+            description,
+            show: true,
+            withButton,
+            btnText,
+            handleBtn
+        })
+    }
 
-    const handleShowPopup = (title, description) => {
-        setPopupData({ title, description });
-        setShowPopup(true);
+    const handleClosePopup = () => {
+        setPopupConfig(prev => ({ ...prev, show: false }));
     };
 
-    const handleClosePopup = () => setShowPopup(false);
-
     return (
-        <PopupContext.Provider value={{ showPopup, popupData, handleShowPopup, handleClosePopup }}>
+        <PopupContext.Provider 
+            value={{ popupConfig, showCustomPopup, handleClosePopup }}
+        >
             {children}
         </PopupContext.Provider>
-    )
-}
+    );
+};
 
 export const usePopup = () => useContext(PopupContext);
