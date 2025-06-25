@@ -25,7 +25,6 @@ function Header() {
                         <Dropdown.Menu>
                             <Dropdown.Item as={Link} to="/">Cardápio</Dropdown.Item>
                             <Dropdown.Item as={Link} to="/pedido">Pedido</Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/contato">Contato</Dropdown.Item>
                             {isAuthenticated ? (
                                 <>
                                     <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
@@ -41,7 +40,6 @@ function Header() {
                     <ul className={styles.nav_links}>
                         <li><Link to="/">Cardápio</Link></li>
                         <li><Link to="/pedido">Pedido</Link></li>
-                        <li><Link to="/contato">Contato</Link></li>
                         {isAuthenticated ? (
                             <li>
                                 <Dropdown>

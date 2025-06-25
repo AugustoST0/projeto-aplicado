@@ -24,8 +24,7 @@ function Login() {
                 email: email,
                 password: password
             });
-            const token = response.data.token;
-            login(token);
+            login(response.data);
         } catch (error) {
             if (error.response && error.response.status === 403) {
                 showCustomPopup({

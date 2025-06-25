@@ -1,52 +1,84 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import api from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
-    const [token, setToken] = useState(() => localStorage.getItem('token'));
-    const [role, setRole] = useState(() => token ? jwtDecode(token).role : null);
-    const [name, setName] = useState(() => token ? jwtDecode(token).name : null);
+    const [accessToken, setAccessToken] = useState(() => localStorage.getItem('accessToken'));
+    const [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('refreshToken'));
+
+    const [name, setName] = useState(() => accessToken ? jwtDecode(accessToken).name : null);
+    const [email, setEmail] = useState(() => accessToken ? jwtDecode(accessToken).email : null);
+    const [role, setRole] = useState(() => accessToken ? jwtDecode(accessToken).role : null);
 
     useEffect(() => {
-        if (token) {
+        if (accessToken) {
             try {
-                const decoded = jwtDecode(token);
-                setRole(decoded.role);
+                const decoded = jwtDecode(accessToken);
                 setName(decoded.name);
+                setEmail(decoded.email);
+                setRole(decoded.role);
             } catch (e) {
                 console.error('Token inválido', e);
-                setRole(null);
-                setName(null);
+                clearSession();
             }
         } else {
-            setRole(null);
-            setName(null);
+            clearSession();
         }
-    }, [token]);
+    }, [accessToken]);
 
-    const login = (newToken) => {
-        setToken(newToken);
-        localStorage.setItem('token', newToken);
+    const clearSession = () => {
+        setAccessToken(null);
+        setRefreshToken(null);
+        localStorage.clear();
+        setName(null);
+        setEmail(null);
+        setRole(null);
+    };
+
+    const login = ({ accessToken, refreshToken }) => {
+        setAccessToken(accessToken);
+        setRefreshToken(refreshToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
         navigate('/');
     };
 
     const logout = () => {
-        setToken(null);
-        localStorage.clear();
+        clearSession();
         navigate('/login');
     };
 
-    const isAuthenticated = !!token;
+    const refresh = () => {
+        if (!refreshToken) return logout();
+
+        return api.post('/api/v1/auth/refresh', null, {
+            headers: {
+                'Authorization': `Bearer ${refreshToken}`
+            }
+        })
+            .then(res => {
+                setAccessToken(res.data.accessToken);
+                localStorage.setItem('accessToken', res.data.accessToken);
+                return res.data.accessToken;
+            })
+            .catch(err => {
+                console.error('Erro ao renovar token:', err);
+                logout();
+            });
+    };
+
+    const isAuthenticated = !!accessToken;
 
     return (
-        <AuthContext.Provider value={{ token, role, name, login, logout, isAuthenticated }}>
+        <AuthContext.Provider value={{ accessToken, refreshToken, name, email, role, login, logout, refresh, isAuthenticated }}>
             {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
 export const useAuth = () => useContext(AuthContext);

@@ -10,7 +10,7 @@ import Layout from './components/layout/Layout';
 import Produtos from './components/pages/Produtos';
 import Container from './components/layout/Container';
 import Pedido from './components/pages/Pedido';
-import Contato from './components/pages/Contato';
+import Perfil from './components/pages/Perfil';
 import Interceptors from './services/Interceptors';
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
                 <Route element={<Layout />}>
                   <Route path="/" element={<Produtos />} />
                   <Route path="/pedido" element={<Pedido />} />
-                  <Route path="/contato" element={<Contato />} />
+                  <Route path="/perfil" element={<Perfil />} />
                 </Route>
               </Routes>
             </Container>

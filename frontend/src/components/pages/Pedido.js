@@ -8,22 +8,27 @@ import Popup from '../layout/Popup';
 
 import api from '../../services/api';
 
+import { useNavigate } from 'react-router-dom'
+
 import { useCarrinho } from '../../contexts/CarrinhoContext';
 import { usePopup } from '../../contexts/PopupContext';
 import { useState } from 'react';
 
 function Pedido() {
 
-    const { carrinho, total } = useCarrinho();
+    const { carrinho, total, clearCarrinho } = useCarrinho();
     const { popupConfig, showCustomPopup, handleClosePopup } = usePopup();
+
     const [selectedDate, setSelectedDate] = useState('');
     const [hour, setHour] = useState(8);
     const [minute, setMinute] = useState(0);
 
+    const navigate = useNavigate();
+
     const deliverDateTime = `${selectedDate}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`;
 
     const bookOrder = () => {
-        api.post('http://localhost:8080/api/orders', {
+        api.post('http://localhost:8080/api/v1/orders', {
             orderDateTime: new Date().toISOString().slice(0, 19),
             deliverDateTime: deliverDateTime,
             orderItemList: carrinho.map(item => ({
@@ -35,7 +40,11 @@ function Pedido() {
                 showCustomPopup({
                     title: 'Pedido reservado com sucesso',
                     description: 'Retire o pedido no horário e data escolhidos',
-                    withButton: true
+                    withButton: true,
+                    handleBtn: () => {
+                        clearCarrinho();
+                        navigate('/');
+                    }
                 })
             })
             .catch(err => {
