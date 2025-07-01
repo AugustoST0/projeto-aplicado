@@ -10,7 +10,7 @@ import Container from './Container';
 
 function Header() {
 
-    const { name, logout, isAuthenticated } = useAuth();
+    const { name, logout, accessToken, isTokenExpired } = useAuth();
 
     return (
         <Container customClass="header_container">
@@ -25,7 +25,7 @@ function Header() {
                         <Dropdown.Menu>
                             <Dropdown.Item as={Link} to="/">Cardápio</Dropdown.Item>
                             <Dropdown.Item as={Link} to="/pedido">Pedido</Dropdown.Item>
-                            {isAuthenticated ? (
+                            {!isTokenExpired(accessToken) ? (
                                 <>
                                     <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
                                     <Dropdown.Item as={Link} to="/historico">Histórico de pedidos</Dropdown.Item>
@@ -40,7 +40,7 @@ function Header() {
                     <ul className={styles.nav_links}>
                         <li><Link to="/">Cardápio</Link></li>
                         <li><Link to="/pedido">Pedido</Link></li>
-                        {isAuthenticated ? (
+                        {!isTokenExpired(accessToken) ? (
                             <li>
                                 <Dropdown>
                                     <Dropdown.Toggle as="div" className={styles.user_content} variant="success" id="dropdown-basic">
