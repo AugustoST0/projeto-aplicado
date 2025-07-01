@@ -28,11 +28,23 @@ function Pedido() {
     const deliverDateTime = `${selectedDate}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`;
 
     const bookOrder = () => {
-        api.post('http://localhost:8080/api/v1/orders', {
+
+        const payload = {
             orderDateTime: new Date().toISOString().slice(0, 19),
             deliverDateTime: deliverDateTime,
             orderItemList: carrinho.map(item => ({
-                productId: item.id,
+                productId: item.productId,
+                quantity: item.quantity
+            }))
+        };
+
+        console.log("Payload enviado:", JSON.stringify(payload, null, 2));
+
+        api.post('/api/v1/orders', {
+            orderDateTime: new Date().toISOString().slice(0, 19),
+            deliverDateTime: deliverDateTime,
+            orderItemList: carrinho.map(item => ({
+                productId: item.productId,
                 quantity: item.quantity
             }))
         })
@@ -40,7 +52,6 @@ function Pedido() {
                 showCustomPopup({
                     title: 'Pedido reservado com sucesso',
                     description: 'Retire o pedido no horário e data escolhidos',
-                    withButton: true,
                     handleBtn: () => {
                         clearCarrinho();
                         navigate('/');
@@ -52,7 +63,6 @@ function Pedido() {
                 showCustomPopup({
                     title: 'Erro ao reservar pedido',
                     description: 'Por favor tente novamente',
-                    withButton: true
                 })
             })
     }
@@ -80,7 +90,6 @@ function Pedido() {
                                     showCustomPopup({
                                         title: 'Data não selecionada',
                                         description: 'Por favor, selecione uma data de entrega.',
-                                        withButton: true
                                     });
                                     return;
                                 }
@@ -89,7 +98,6 @@ function Pedido() {
                                     showCustomPopup({
                                         title: 'Carrinho vazio',
                                         description: 'Adicione pelo menos um item ao carrinho antes de fazer o pedido.',
-                                        withButton: true
                                     });
                                     return;
                                 }
@@ -105,8 +113,6 @@ function Pedido() {
                         >
                             Reservar Pedido
                         </Button>
-
-                        <Button variant='success'>Finalizar Pedido</Button>
                     </div>
                 </div>
             </Container>

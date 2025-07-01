@@ -26,9 +26,9 @@ function PedidoComposition() {
                 {carrinho.length > 0 ? (
                     carrinho.map(item => (
                         <PedidoItem
-                            key={item.id}
+                            key={item.productId}
                             item={item}
-                            handleOnClick={() => openPopupToRemove(item.id)}
+                            handleOnClick={() => openPopupToRemove(item.productId)}
                         />
                     ))
                 ) : (

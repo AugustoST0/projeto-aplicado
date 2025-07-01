@@ -12,31 +12,28 @@ function Popup({ title, description, show, handleClose, withButton, btnText, han
             <Modal.Body>
                 {description}
             </Modal.Body>
-
-            {withButton && (
-                <Modal.Footer>
+            <Modal.Footer>
+                <Button
+                    variant={withButton ? "secondary" : "primary"}
+                    onClick={() => {
+                        (!withButton && handleBtn) && handleBtn();
+                        handleClose();
+                    }}
+                >
+                    {withButton ? "Cancelar" : "Fechar"}
+                </Button>
+                {withButton && (
                     <Button
-                        variant={btnText === '' ? "primary" : "secondary"}
+                        variant="primary"
                         onClick={() => {
-                            handleBtn && handleBtn();
+                            handleBtn();
                             handleClose();
                         }}
                     >
-                        {btnText === '' ? "Fechar" : "Cancelar"}
+                        {btnText}
                     </Button>
-                    {btnText !== '' && (
-                        <Button
-                            variant="primary"
-                            onClick={() => {
-                                handleBtn();
-                                handleClose();
-                            }}
-                        >
-                            {btnText}
-                        </Button>
-                    )}
-                </Modal.Footer>
-            )}
+                )}
+            </Modal.Footer>
         </Modal>
     );
 }

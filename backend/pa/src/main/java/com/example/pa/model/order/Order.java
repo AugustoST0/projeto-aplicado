@@ -1,5 +1,6 @@
 package com.example.pa.model.order;
 
+import com.example.pa.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,10 @@ public class Order {
     private LocalDateTime orderDateTime;
     private LocalDateTime deliverDateTime;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> orderItemList = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const useAxiosInterceptors = () => {
-    const { accessToken, refreshToken, refresh, logout } = useAuth();
+    const { accessToken, refreshToken, refresh, logout, isTokenExpired, isTokenNearExpiration } = useAuth();
 
     useEffect(() => {
         let isRefreshing = false;
@@ -22,16 +22,33 @@ export const useAxiosInterceptors = () => {
 
         // request
         const requestInterceptor = api.interceptors.request.use(
-            (config) => {
+            async (config) => {
                 const isAuthRoute = config.url.includes('/auth/');
-                if (accessToken && !isAuthRoute) {
+
+                if (!accessToken || isAuthRoute) return config;
+
+                if (isTokenExpired(accessToken)) {
+                    setTimeout(() => logout(), 0);
+                    return Promise.reject(new Error('Token expirado'));
+                }
+
+                if (isTokenNearExpiration(accessToken, 60)) {
+                    try {
+                        const newToken = await refresh(); // atualiza o token e salva
+                        config.headers['Authorization'] = `Bearer ${newToken}`;
+                    } catch (e) {
+                        logout();
+                        return Promise.reject(new Error('Erro ao renovar token'));
+                    }
+                } else {
                     config.headers['Authorization'] = `Bearer ${accessToken}`;
                 }
+
                 return config;
-            }, (error) => {
-                return Promise.reject(error);
-            }
+            },
+            (error) => Promise.reject(error)
         );
+
 
         // response
         const responseInterceptor = api.interceptors.response.use(
@@ -78,5 +95,5 @@ export const useAxiosInterceptors = () => {
             api.interceptors.request.eject(requestInterceptor);
             api.interceptors.response.eject(responseInterceptor);
         }
-    }, [accessToken, refreshToken, refresh, logout])
+    }, [accessToken, refreshToken, refresh, logout, isTokenExpired, isTokenNearExpiration])
 }

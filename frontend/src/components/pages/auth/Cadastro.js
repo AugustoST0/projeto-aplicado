@@ -26,7 +26,6 @@ function Cadastro() {
             showCustomPopup({
                 title: 'Senhas não conferem',
                 description: 'As senhas informadas são diferentes. Tente novamente.',
-                withButton: true
             })
             return;
         }
@@ -41,7 +40,6 @@ function Cadastro() {
                 showCustomPopup({
                     title: 'Cadastro realizado',
                     description: 'O seu cadastro foi bem sucedido',
-                    withButton: true,
                 })
             })
             .then(() => navigate('/login'))

@@ -6,7 +6,7 @@ export const CarrinhoProvider = ({ children }) => {
 
     class OrderItem {
         constructor(product, quantity) {
-            this.id = product.id;
+            this.productId = product.id;
             this.name = product.name;
             this.price = product.price;
             this.quantity = quantity;
@@ -26,11 +26,11 @@ export const CarrinhoProvider = ({ children }) => {
 
     const handleAdd = (product, quantity) => {
         setCarrinho(prev => {
-            const itemExistente = prev.find(item => item.id === product.id);
+            const itemExistente = prev.find(item => item.productId === product.id);
 
             if (itemExistente) {
                 return prev.map(item =>
-                    item.id === product.id
+                    item.productId === product.id
                         ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
@@ -41,7 +41,7 @@ export const CarrinhoProvider = ({ children }) => {
     };
 
     const handleRemove = (id) => {
-        setCarrinho(prev => prev.filter(item => item.id !== id));
+        setCarrinho(prev => prev.filter(item => item.productId !== id));
     }
 
     const clearCarrinho = () => {

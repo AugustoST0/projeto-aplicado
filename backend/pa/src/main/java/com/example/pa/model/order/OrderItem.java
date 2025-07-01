@@ -1,6 +1,7 @@
 package com.example.pa.model.order;
 
 import com.example.pa.model.product.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonIgnore
     private Order order;
 
     public OrderItem(Order order, Product product, Integer quantity) {

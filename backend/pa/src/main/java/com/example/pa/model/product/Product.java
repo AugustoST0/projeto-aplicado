@@ -1,6 +1,7 @@
 package com.example.pa.model.product;
 
 import com.example.pa.model.order.OrderItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,7 @@ public class Product {
     private ProductCategory category;
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<OrderItem> orderItemList = new ArrayList<>();
 
     public Product(ProductDTO dto) {

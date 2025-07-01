@@ -23,7 +23,9 @@ function Produtos() {
 
     useEffect(() => {
         api.get('/api/v1/products')
-            .then(res => setProducts(res.data))
+            .then(res => {
+                setProducts(res.data)
+            })
             .catch(err => console.error(err))
     }, [])
 

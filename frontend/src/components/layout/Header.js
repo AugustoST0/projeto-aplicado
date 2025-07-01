@@ -45,7 +45,7 @@ function Header() {
                                 <Dropdown>
                                     <Dropdown.Toggle as="div" className={styles.user_content} variant="success" id="dropdown-basic">
                                         <FaUserCircle />
-                                        <span>{name.toUpperCase()}</span>
+                                        <span>{name && name.toUpperCase()}</span>
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>

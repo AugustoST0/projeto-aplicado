@@ -30,13 +30,11 @@ function Login() {
                 showCustomPopup({
                     title: 'Erro de Login',
                     description: 'E-mail ou senha inválidos',
-                    withButton: true
                 });
             } else {
                 showCustomPopup({
                     title: 'Erro de Conexão',
                     description: 'Não foi possível conectar ao servidor',
-                    withButton: true
                 });
             }
         }

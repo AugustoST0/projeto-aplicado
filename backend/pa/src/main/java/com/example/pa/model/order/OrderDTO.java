@@ -6,5 +6,6 @@ import java.util.List;
 public record OrderDTO(
         LocalDateTime orderDateTime,
         LocalDateTime deliverDateTime,
-        List<OrderItemDTO> orderItemList
+        List<OrderItemDTO> orderItemList,
+        String userId
 ) { }

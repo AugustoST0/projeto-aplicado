@@ -11,9 +11,10 @@ export const AuthProvider = ({ children }) => {
     const [accessToken, setAccessToken] = useState(() => localStorage.getItem('accessToken'));
     const [refreshToken, setRefreshToken] = useState(() => localStorage.getItem('refreshToken'));
 
-    const [name, setName] = useState(() => accessToken ? jwtDecode(accessToken).name : null);
-    const [email, setEmail] = useState(() => accessToken ? jwtDecode(accessToken).email : null);
-    const [role, setRole] = useState(() => accessToken ? jwtDecode(accessToken).role : null);
+    const [name, setName] = useState(() => accessToken ? jwtDecode(accessToken).name : '');
+    const [email, setEmail] = useState(() => accessToken ? jwtDecode(accessToken).email : '');
+    const [role, setRole] = useState(() => accessToken ? jwtDecode(accessToken).role : '');
+
 
     useEffect(() => {
         if (accessToken) {
@@ -34,25 +35,26 @@ export const AuthProvider = ({ children }) => {
     const clearSession = () => {
         setAccessToken(null);
         setRefreshToken(null);
-        localStorage.clear();
-        setName(null);
-        setEmail(null);
-        setRole(null);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        setName('');
+        setEmail('');
+        setRole('');
     };
 
-    const login = ({ accessToken, refreshToken }) => {
+
+    const login = ({ accessToken, refreshToken }, shouldRedirect = true) => {
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
-        navigate('/');
+        if (shouldRedirect) navigate('/');
     };
 
     const logout = () => {
         clearSession();
         navigate('/login');
     };
-
     const refresh = () => {
         if (!refreshToken) return logout();
 
@@ -72,10 +74,30 @@ export const AuthProvider = ({ children }) => {
             });
     };
 
-    const isAuthenticated = !!accessToken;
+    const isTokenExpired = (token) => {
+        try {
+            const { exp } = jwtDecode(token);
+            return Date.now() >= exp * 1000;
+        } catch (e) {
+            return true;
+        }
+    };
+
+    const isAuthenticated = isTokenExpired();
+
+    const isTokenNearExpiration = (token, seconds = 60) => {
+        try {
+            const { exp } = jwtDecode(token);
+            const now = Date.now();
+            const expirationTime = exp * 1000;
+            return expirationTime - now <= seconds * 1000;
+        } catch (e) {
+            return true;
+        }
+    };
 
     return (
-        <AuthContext.Provider value={{ accessToken, refreshToken, name, email, role, login, logout, refresh, isAuthenticated }}>
+        <AuthContext.Provider value={{ accessToken, refreshToken, name, email, role, login, logout, refresh, isAuthenticated, isTokenExpired, isTokenNearExpiration }}>
             {children}
         </AuthContext.Provider>
     );
