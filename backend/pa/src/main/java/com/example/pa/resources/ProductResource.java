@@ -29,4 +29,16 @@ public class ProductResource {
         return ResponseEntity.ok().body(newProduct);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> update(@PathVariable String id, @RequestBody @Valid ProductDTO obj) {
+        Product updatedProduct = productService.update(id, obj);
+        return ResponseEntity.ok().body(updatedProduct);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        Product product = productService.findById(id);
+        productService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

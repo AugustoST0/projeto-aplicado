@@ -12,6 +12,7 @@ import Container from './components/layout/Container';
 import Pedido from './components/pages/Pedido';
 import Perfil from './components/pages/Perfil';
 import Historico from './components/pages/Historico';
+import Controle from './components/pages/Controle';
 import ProtectedRoute from './components/pages/ProtectedRoute';
 import Interceptors from './services/Interceptors';
 
@@ -32,6 +33,7 @@ function App() {
                   <Route element={<ProtectedRoute />}>
                     <Route path="/perfil" element={<Perfil />} />
                     <Route path="/historico" element={<Historico />} />
+                    <Route path="/controle" element={<Controle />} />
                   </Route>
                 </Route>
               </Routes>

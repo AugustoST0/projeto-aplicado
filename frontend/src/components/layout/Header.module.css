@@ -12,6 +12,13 @@
 .logo {
     font-size: 1.8rem;
     font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo span {
+    font-size: 1rem;
+    font-weight: 400;
 }
 
 .nav {

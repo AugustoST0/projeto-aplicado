@@ -15,6 +15,8 @@ function PedidoCard({ order, numeroPedido }) {
     return (
         <div className={styles.pedido_card}>
             <h3>Pedido #{numeroPedido}</h3>
+
+            <p><strong>Status:</strong> <span className={`${styles.status} ${styles[order.status]}`}>{order.status}</span></p>
             <p><strong>Data do pedido:</strong> {formatDate(order.orderDateTime)}</p>
             <p><strong>Data de entrega:</strong> {formatDate(order.deliverDateTime)}</p>
 
@@ -31,5 +33,6 @@ function PedidoCard({ order, numeroPedido }) {
         </div>
     );
 }
+
 
 export default PedidoCard;

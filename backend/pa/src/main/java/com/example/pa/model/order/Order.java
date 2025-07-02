@@ -1,6 +1,7 @@
 package com.example.pa.model.order;
 
 import com.example.pa.model.user.User;
+import com.example.pa.model.user.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
     private LocalDateTime orderDateTime;
     private LocalDateTime deliverDateTime;
 

@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
     const [email, setEmail] = useState(() => accessToken ? jwtDecode(accessToken).email : '');
     const [role, setRole] = useState(() => accessToken ? jwtDecode(accessToken).role : '');
 
-
     useEffect(() => {
         if (accessToken) {
             try {

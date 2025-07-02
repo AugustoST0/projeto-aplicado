@@ -3,17 +3,20 @@ package com.example.pa.services;
 import com.example.pa.model.order.Order;
 import com.example.pa.model.order.OrderDTO;
 import com.example.pa.model.order.OrderItem;
+import com.example.pa.model.order.OrderStatus;
 import com.example.pa.model.product.Product;
 import com.example.pa.model.user.User;
 import com.example.pa.repositories.OrderRepository;
 import com.example.pa.repositories.ProductRepository;
 import com.example.pa.repositories.UserRepository;
+import com.example.pa.services.exceptions.OrderNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -37,6 +40,7 @@ public class OrderService {
 
     public Order insert(OrderDTO obj) {
         Order newOrder = new Order();
+        newOrder.setStatus(OrderStatus.PENDENTE);
         newOrder.setOrderDateTime(obj.orderDateTime());
         newOrder.setDeliverDateTime(obj.deliverDateTime());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -56,5 +60,14 @@ public class OrderService {
         newOrder.getOrderItemList().addAll(items);
 
         return orderRepository.save(newOrder);
+    }
+
+    public Order findById(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Pedido não encontrado com ID: " + id));
+    }
+
+    public void save(Order order) {
+        orderRepository.save(order);
     }
 }

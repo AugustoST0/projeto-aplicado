@@ -1,0 +1,41 @@
+.visaoGeralContainer {
+  padding: 40px 0;
+}
+
+.cardsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 220px;
+  height: 160px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.cardTitle {
+  font-weight: 600;
+  color: #1f6fb2;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.cardValue {
+  font-weight: 800;
+  font-size: 3rem;
+  color: #2f4f4f;
+}

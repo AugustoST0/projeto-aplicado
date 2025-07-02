@@ -39,7 +39,7 @@ function Perfil() {
         setNewEmail(user && user.email);
     }, [user])
 
-    const alterInfo = (e) => {
+    const confirmAlterInfo = (e) => {
         e.preventDefault();
 
         if (newPassword && confirmedPassword && newPassword !== confirmedPassword) {
@@ -58,6 +58,16 @@ function Perfil() {
             return;
         }
 
+        showCustomPopup({
+            title: 'Confirmar alteração',
+            description: 'Tem certeza que deseja salvar as alterações no seu perfil?',
+            withButton: true,
+            btnText: 'Salvar',
+            handleBtn: () => alterInfoConfirmed()
+        });
+    };
+
+    const alterInfoConfirmed = () => {
         api.put('/api/v1/users', {
             id: user.id,
             name: newName || user.name,
@@ -70,7 +80,8 @@ function Perfil() {
                 const decoded = jwtDecode(newAccessToken);
 
                 login({
-                    accessToken: newAccessToken, refreshToken
+                    accessToken: newAccessToken,
+                    refreshToken
                 }, false);
 
                 setUser({
@@ -92,8 +103,19 @@ function Perfil() {
                     description: errorMessage,
                 });
             });
+    };
 
-    }
+    const confirmDeleteUser = () => {
+        showCustomPopup({
+            title: 'Confirmar exclusão',
+            description: 'Tem certeza que deseja deletar sua conta? Esta ação não poderá ser desfeita.',
+            withButton: true,
+            btnText: 'Excluir conta',
+            handleBtn: () => {
+                deleteUser();
+            }
+        });
+    };
 
     const deleteUser = () => {
         api.delete(`/api/v1/users/${user.id}`)
@@ -131,12 +153,12 @@ function Perfil() {
                         setNewEmail={setNewEmail}
                         setNewPassword={setNewPassword}
                         setConfirmedPassword={setConfirmedPassword}
-                        handleAlterInfo={alterInfo}
+                        handleAlterInfo={confirmAlterInfo}
                     />
                     <div className={styles.perfil_bottom}>
                         <h3>Zona de perigo</h3>
                         <div>
-                            <Button variant="danger" onClick={deleteUser}>Deletar conta</Button>
+                            <Button variant="danger" onClick={confirmDeleteUser}>Deletar conta</Button>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,57 @@
+.card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 10px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-left: 6px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.titulo {
+    color: #007bff;
+    margin: 0;
+}
+
+.status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.status_pendente {
+    background-color: #007bff;
+}
+
+.status_preparando {
+    background-color: #f0ad4e;
+}
+
+.status_pronto {
+    background-color: #5cb85c;
+}
+
+.botao {
+    background-color: #17c1e8;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.botao:hover {
+    background-color: #0ea4c1;
+}

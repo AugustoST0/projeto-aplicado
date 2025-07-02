@@ -2,6 +2,7 @@ package com.example.pa.resources;
 
 import com.example.pa.model.order.Order;
 import com.example.pa.model.order.OrderDTO;
+import com.example.pa.model.order.OrderStatus;
 import com.example.pa.model.user.User;
 import com.example.pa.services.OrderService;
 import com.example.pa.services.UserService;
@@ -40,5 +41,13 @@ public class OrderResource {
     public ResponseEntity<Order> insert(@RequestBody @Valid OrderDTO obj) {
         Order newOrder = orderService.insert(obj);
         return ResponseEntity.ok().body(newOrder);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable Long id, @RequestBody OrderStatus newStatus) {
+        Order order = orderService.findById(id);
+        order.setStatus(newStatus);
+        orderService.save(order);
+        return ResponseEntity.noContent().build();
     }
 }

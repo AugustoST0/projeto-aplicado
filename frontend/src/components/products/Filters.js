@@ -10,7 +10,6 @@ function Filters({ currFilter, setCurrFilter }) {
 
     return (
         <div className={styles.filters_content}>
-            <h1>Nosso Cardápio</h1>
             <ButtonGroup aria-label="Filtros">
                 <Button
                     variant={currFilter === null ? 'primary' : 'secondary'}

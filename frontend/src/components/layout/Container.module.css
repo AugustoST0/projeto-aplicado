@@ -20,9 +20,27 @@
     z-index: 0;
 }
 
+.nonuser_container {
+    min-height: 88vh;
+    background-color: #f5f5f5;
+    align-items: center;
+    padding: 2em;
+    margin-top: 12vh;
+    z-index: 0;
+}
+
 .header_container {
     height: 12vh;
     background-color: #4a90e2;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    z-index: 999;
+}
+
+.nonuser_header {
+    height: 12vh;
+    background-color: #4682b4;
     color: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     position: fixed;
