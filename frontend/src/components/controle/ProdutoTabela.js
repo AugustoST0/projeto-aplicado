@@ -1,11 +1,10 @@
-import styles from './ProdutoTabela.module.css';
-
-import ControlButton from './ControlButton';
+import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 
 function ProdutoTabela({ produtos, onEdit, onDeleteConfirm }) {
     return (
-        <div className={styles.table_container}>
-            <table className={styles.produtos_table}>
+        <div className="table-responsive w-100">
+            <Table striped bordered hover responsive="md">
                 <thead>
                     <tr>
                         <th>Nome</th>
@@ -20,16 +19,31 @@ function ProdutoTabela({ produtos, onEdit, onDeleteConfirm }) {
                         <tr key={produto.id}>
                             <td>{produto.name}</td>
                             <td>{produto.description}</td>
-                            <td>R${produto.price}</td>
+                            <td>
+                                R${typeof produto.price === 'number'
+                                    ? produto.price.toFixed(2).replace('.', ',')
+                                    : '0,00'}
+                            </td>
                             <td>{produto.category.charAt(0) + produto.category.slice(1).toLowerCase()}</td>
                             <td>
-                                <ControlButton variant="action_button" handleClick={() => onEdit(produto)} text="Editar" />
-                                <ControlButton variant="btnDanger" handleClick={() => onDeleteConfirm(produto.id, produto.name)} text="Deletar" />
+                                <div className="d-flex flex-wrap gap-3">
+                                    <Button
+                                        variant="secondary"
+                                        size="sm"
+                                        className="me-2"
+                                        onClick={() => onEdit(produto)}
+                                    >Editar</Button>
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        onClick={() => onDeleteConfirm(produto.id, produto.name)}
+                                    >Deletar</Button>
+                                </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </Table>
         </div>
     );
 }

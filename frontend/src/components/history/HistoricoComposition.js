@@ -1,12 +1,10 @@
 import PedidoCard from '../history/PedidoCard';
-
 import { useState, useEffect } from 'react';
-
 import api from '../../services/api';
 
-function HistoricoComposition() {
-
+function HistoricoComposition({ currFilter }) {
     const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
 
     useEffect(() => {
         api.get('/api/v1/orders/porUser')
@@ -14,14 +12,21 @@ function HistoricoComposition() {
                 setOrders(res.data);
             })
             .catch(err => console.error(err))
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        setFilteredOrders(currFilter
+            ? orders.filter(order => order.status?.toUpperCase() === currFilter)
+            : orders
+        );
+    }, [orders, currFilter]);
 
     return (
         <div>
-            {orders.length === 0 ? (
-                <p>Você não fez nenhum pedido.</p>
+            {filteredOrders.length === 0 ? (
+                <p>Não há nenhum pedido{currFilter ? ` ${currFilter.toLowerCase()}` : ''}.</p>
             ) : (
-                orders.map((order, index) => (
+                filteredOrders.map((order, index) => (
                     <PedidoCard
                         key={order.id}
                         order={order}
@@ -30,7 +35,7 @@ function HistoricoComposition() {
                 ))
             )}
         </div>
-    )
+    );
 }
 
 export default HistoricoComposition;

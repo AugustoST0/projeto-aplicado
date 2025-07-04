@@ -7,6 +7,17 @@
 }
 
 .historico_container h1 {
+    color: #1565c0;
+    margin: 1em 0 1em 0;
+    font-size: 1.5em;
+    font-weight: bold;
     text-align: center;
-    margin-bottom: 32px;
+}
+
+@media(max-width: 767px) {
+    .historico_container {
+        width: 100%;
+        box-shadow: none;
+        border: none;
+    }
 }

@@ -39,7 +39,7 @@ public class UserService {
             String encryptedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encryptedPassword);
         } else {
-            user.setPassword(existingUser.getPassword()); // MANTÉM senha antiga
+            user.setPassword(existingUser.getPassword());
         }
 
         return userRepository.save(user);

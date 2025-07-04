@@ -1,3 +1,4 @@
+import { Form, InputGroup, Row, Col } from 'react-bootstrap';
 import styles from './DatePicker.module.css';
 
 function DatePicker({ selectedDate, setSelectedDate, hour, setHour, minute, setMinute }) {
@@ -27,57 +28,54 @@ function DatePicker({ selectedDate, setSelectedDate, hour, setHour, minute, setM
 
     return (
         <div className={styles.date_picker}>
-            <label className="form-label">Selecione a data de entrega</label>
-            <select
-                className="form-select"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-            >
-                <option value="">Selecione...</option>
-                {dateOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                    </option>
-                ))}
-            </select>
+            <Form.Group className="mb-3" controlId="selectDate">
+                <Form.Label>Selecione a data de entrega</Form.Label>
+                <Form.Select
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                >
+                    <option value="">Selecione...</option>
+                    {dateOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                        </option>
+                    ))}
+                </Form.Select>
+            </Form.Group>
 
-            <div className="d-flex align-items-center gap-2 mt-3">
-                <div>
-                    <label className="form-label">Selecione o horário de entrega</label>
-                    <div className="d-flex gap-2">
-                        <input
-                            type="number"
-                            className="form-control"
-                            style={{ width: '80px' }}
-                            min={8}
-                            max={20}
-                            value={hour}
-                            onChange={(e) => {
-                                let value = parseInt(e.target.value);
-                                if (value < 8) value = 8;
-                                if (value > 20) value = 20;
-                                setHour(value);
-                            }}
-                        />
-                        <span className="fs-4">:</span>
-                        <input
-                            type="number"
-                            className="form-control"
-                            style={{ width: '80px' }}
-                            min={0}
-                            max={55}
-                            step={5}
-                            value={minute}
-                            onChange={(e) => {
-                                let value = parseInt(e.target.value);
-                                if (value < 0) value = 0;
-                                if (value > 55) value = 55;
-                                setMinute(Math.round(value / 5) * 5);
-                            }}
-                        />
-                    </div>
-                </div>
-            </div>
+            <Form.Group controlId="selectTime" className="mt-3">
+                <Form.Label>Selecione o horário de entrega</Form.Label>
+                <InputGroup style={{ maxWidth: '180px' }}>
+                    <Form.Control
+                        type="number"
+                        min={8}
+                        max={20}
+                        value={hour}
+                        onChange={(e) => {
+                            let value = parseInt(e.target.value);
+                            if (isNaN(value)) value = 8;
+                            if (value < 8) value = 8;
+                            if (value > 20) value = 20;
+                            setHour(value);
+                        }}
+                    />
+                    <InputGroup.Text>:</InputGroup.Text>
+                    <Form.Control
+                        type="number"
+                        min={0}
+                        max={55}
+                        step={5}
+                        value={minute}
+                        onChange={(e) => {
+                            let value = parseInt(e.target.value);
+                            if (isNaN(value)) value = 0;
+                            if (value < 0) value = 0;
+                            if (value > 55) value = 55;
+                            setMinute(Math.round(value / 5) * 5);
+                        }}
+                    />
+                </InputGroup>
+            </Form.Group>
         </div>
     )
 }

@@ -54,7 +54,7 @@ function Produtos() {
 
     return (
         <>
-            <Container customClass={role === 'USER' ? 'main_container' : 'nonuser_container'}>
+            <Container customClass={role === 'EMPLOYEE' || role === 'ADMIN' ? 'nonuser_container' : 'main_container'}>
                 <BemVindo />
                 <h1 className={styles.title}>
                     {role === 'USER' ? <>Nosso Cardápio</> : <>Visão geral</>}

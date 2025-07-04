@@ -1,8 +1,8 @@
-.visaoGeralContainer {
+.vg_container {
   padding: 40px 0;
 }
 
-.cardsContainer {
+.cards_container {
   display: flex;
   justify-content: center;
   gap: 32px;
@@ -27,14 +27,14 @@
   transform: translateY(-4px);
 }
 
-.cardTitle {
+.card_title {
   font-weight: 600;
   color: #1f6fb2;
   font-size: 1.1rem;
   margin-bottom: 12px;
 }
 
-.cardValue {
+.card_value {
   font-weight: 800;
   font-size: 3rem;
   color: #2f4f4f;

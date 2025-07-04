@@ -34,7 +34,7 @@ export const useAxiosInterceptors = () => {
 
                 if (isTokenNearExpiration(accessToken, 60)) {
                     try {
-                        const newToken = await refresh(); // atualiza o token e salva
+                        const newToken = await refresh();
                         config.headers['Authorization'] = `Bearer ${newToken}`;
                     } catch (e) {
                         logout();

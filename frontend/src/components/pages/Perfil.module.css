@@ -36,3 +36,11 @@
 .perfil_bottom>div {
     margin-top: 1em;
 }
+
+@media(max-width: 767px) {
+    .perfil_container {
+        width: 100%;
+        box-shadow: none;
+        border: none;
+    }
+}

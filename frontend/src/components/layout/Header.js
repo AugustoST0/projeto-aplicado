@@ -1,102 +1,95 @@
-import styles from './Header.module.css';
-import Dropdown from 'react-bootstrap/Dropdown';
-
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { FaUserCircle } from "react-icons/fa";
 
-import Container from './Container';
+import styles from './Header.module.css';
 
 function Header() {
-
     const { name, logout, accessToken, isTokenExpired, role } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        if (role !== 'USER') navigate('/login');
+    };
+
+    const getRoleArea = () => {
+        if (role === 'EMPLOYEE') return "Funcionário";
+        if (role === 'ADMIN') return "Administrador";
+        return null;
+    };
 
     return (
-        <>
-            <Container customClass={role === 'USER' ? 'header_container' : 'nonuser_header'}>
-                <div className={styles.header_content}>
-                    <div className={styles.logo}>
-                        SESI Lanches
-                        {role !== 'USER' &&
-                            <span>Área do {role === 'EMPLOYEE' ?
-                                <span>Funcionário</span> :
-                                <span>Administrador</span>}
-                            </span>
-                        }
-                    </div>
-                    <div className={styles.nav}>
-                        <Dropdown>
-                            <Dropdown.Toggle as="div" className={styles.menu_toggle} variant="success" id="dropdown-basic">
-                                ☰
-                            </Dropdown.Toggle>
+        <Navbar bg={role === 'EMPLOYEE' || role === 'ADMIN' ? "dark" : "primary"} variant="dark" expand="md" fixed="top">
+            <Container>
+                <Navbar.Brand as={Link} to="/">
+                    SESI Lanches{' '}
+                    {getRoleArea() && <small className="d-block" style={{ fontSize: "0.8rem", fontWeight: "normal" }}>Área do {getRoleArea()}</small>}
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="main-navbar-nav" />
+                <Navbar.Collapse id="main-navbar-nav">
+                    <Nav className="me-auto">
+                        <Nav.Link as={Link} to="/">
+                            {role !== 'EMPLOYEE' && role !== 'ADMIN' ? 'Cardápio' : 'Início'}
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/pedido">
+                            {role !== 'EMPLOYEE' && role !== 'ADMIN' ? 'Pedido' : 'Pedidos'}
+                        </Nav.Link>
+                        {!isTokenExpired(accessToken) && role === 'USER' && (
+                            <Nav.Link as={Link} to="/historico">Histórico</Nav.Link>
+                        )}
+                        {!isTokenExpired(accessToken) && role === 'EMPLOYEE' && (
+                            <Nav.Link as={Link} to="/controle">Controle</Nav.Link>
+                        )}
+                        {!isTokenExpired(accessToken) && role === 'ADMIN' && (
+                            <Nav.Link as={Link} to="/controle">Gestão</Nav.Link>
+                        )}
+                    </Nav>
 
-                            <Dropdown.Menu>
-                                <Dropdown.Item as={Link} to="/">
-                                    {role === 'USER' ? <>Cardápio</> : <>Início</>}
-                                </Dropdown.Item>
-                                <Dropdown.Item as={Link} to="/pedido">
-                                    {role === 'USER' ? <>Pedido</> : <>Pedidos</>}
-                                </Dropdown.Item>
-                                {!isTokenExpired(accessToken) ? (
-                                    <>
-                                        {role === 'USER' && (
-                                            <Dropdown.Item as={Link} to="/historico">Histórico de pedidos</Dropdown.Item>
-                                        )}
-                                        {role === 'EMPLOYEE' && (
-                                            <Dropdown.Item as={Link} to="/controle">Controle de estoque</Dropdown.Item>
-                                        )}
-                                        {role === 'ADMIN' && (
-                                            <Dropdown.Item as={Link} to="/controle">Gestão de usuários</Dropdown.Item>
-                                        )}
-                                        <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
-                                        <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
-                                    </>
-                                ) : (
-                                    <Dropdown.Item as={Link} to="/login">Faça login</Dropdown.Item>
-                                )}
-                            </Dropdown.Menu>
-                        </Dropdown>
+                    <Nav>
+                        {!isTokenExpired(accessToken) ? (
+                            <>
+                                <div id={styles.nav_dropdown}>
+                                    <NavDropdown
+                                        title={
+                                            <span>
+                                                <FaUserCircle />
+                                                <strong style={{ margin: '0 10px 0 8px' }}>
+                                                    {name?.toUpperCase()}
+                                                </strong>
+                                            </span>
+                                        }
+                                        align="end"
+                                    >
+                                        <NavDropdown.Item as={Link} to="/perfil">Meu perfil</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                                    </NavDropdown>
+                                </div>
 
-                        <ul className={styles.nav_links}>
-                            <li><Link to="/">
-                                {role === 'USER' ? <>Cardápio</> : <>Início</>}
-                            </Link></li>
-                            <li><Link to="/pedido">
-                                {role === 'USER' ? <>Pedido</> : <>Pedidos</>}
-                            </Link></li>
-                            {!isTokenExpired(accessToken) ? (
-                                <li>
-                                    <Dropdown>
-                                        <Dropdown.Toggle as="div" className={styles.user_content} variant="success" id="dropdown-basic">
-                                            <FaUserCircle />
-                                            <span>{name && name.toUpperCase()}</span>
-                                        </Dropdown.Toggle>
-
-                                        <Dropdown.Menu>
-                                            {role === 'USER' && (
-                                                <Dropdown.Item as={Link} to="/historico">Histórico de pedidos</Dropdown.Item>
-                                            )}
-                                            {role === 'EMPLOYEE' && (
-                                                <Dropdown.Item as={Link} to="/controle">Controle de estoque</Dropdown.Item>
-                                            )}
-                                            {role === 'ADMIN' && (
-                                                <Dropdown.Item as={Link} to="/controle">Gestão de usuários</Dropdown.Item>
-                                            )}
-                                            <Dropdown.Item as={Link} to="/perfil">Meu perfil</Dropdown.Item>
-                                            <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </li>
-                            ) : (
-                                <li><Link to='/login'>Faça login</Link></li>
-                            )}
-                        </ul>
-                    </div>
-                </div>
+                                <Nav.Link
+                                    as={Link}
+                                    to="/perfil"
+                                    className="d-md-none nav-user-option"
+                                >
+                                    Meu perfil
+                                </Nav.Link>
+                                <Nav.Link
+                                    onClick={handleLogout}
+                                    className="d-md-none nav-user-option"
+                                >
+                                    Logout
+                                </Nav.Link>
+                            </>
+                        ) : (
+                            <Nav.Link as={Link} to="/login">Faça login</Nav.Link>
+                        )}
+                    </Nav>
+                </Navbar.Collapse>
             </Container>
-        </>
-    )
+        </Navbar>
+    );
 }
 
 export default Header;

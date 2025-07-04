@@ -1,4 +1,6 @@
-import styles from './PedidoCard.module.css';
+import Card from 'react-bootstrap/Card';
+import Badge from 'react-bootstrap/Badge';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 function formatDate(dateTime) {
     const date = new Date(dateTime);
@@ -11,28 +13,49 @@ function formatDate(dateTime) {
     });
 }
 
-function PedidoCard({ order, numeroPedido }) {
-    return (
-        <div className={styles.pedido_card}>
-            <h3>Pedido #{numeroPedido}</h3>
-
-            <p><strong>Status:</strong> <span className={`${styles.status} ${styles[order.status]}`}>{order.status}</span></p>
-            <p><strong>Data do pedido:</strong> {formatDate(order.orderDateTime)}</p>
-            <p><strong>Data de entrega:</strong> {formatDate(order.deliverDateTime)}</p>
-
-            <div>
-                <h4>Itens:</h4>
-                <ul>
-                    {order.orderItemList.map(item => (
-                        <li key={item.id}>
-                            {item.product.name} - {item.quantity}x - R${(item.product.price * item.quantity).toFixed(2)}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>
-    );
+function getStatusVariant(status) {
+    switch (status) {
+        case 'PENDENTE':
+            return 'warning';
+        case 'PREPARANDO':
+            return 'info';
+        case 'PRONTO':
+            return 'success';
+        case 'ENTREGUE':
+            return 'secondary';
+        default:
+            return 'dark';
+    }
 }
 
+function PedidoCard({ order, numeroPedido }) {
+    return (
+        <Card className="mb-4 shadow-sm border-0 bg-light">
+            <Card.Body>
+                <Card.Title>Pedido #{numeroPedido}</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                    Status:
+                    <Badge bg={getStatusVariant(order.status)} className="ms-2">
+                        {order.status}
+                    </Badge>
+                </Card.Subtitle>
+
+                <Card.Text>
+                    <strong>Data do pedido:</strong> {formatDate(order.orderDateTime)}<br />
+                    <strong>Data de entrega:</strong> {formatDate(order.deliverDateTime)}
+                </Card.Text>
+
+                <h5 className="mt-3">Itens:</h5>
+                <ListGroup variant="flush">
+                    {order.orderItemList.map(item => (
+                        <ListGroup.Item key={item.id}>
+                            {item.product.name} - {item.quantity}x - R${(item.product.price * item.quantity).toFixed(2)}
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
+            </Card.Body>
+        </Card>
+    );
+}
 
 export default PedidoCard;

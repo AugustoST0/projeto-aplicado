@@ -90,7 +90,7 @@ function Pedido() {
             {role === 'USER' && (
                 <>
                     <Container customClass="main_container">
-                        <div className={styles.order_content}>
+                        <div className={styles.order_container}>
                             <h1>Meu Pedido</h1>
                             <PedidoComposition />
                             <p>Total: R$ {total.toFixed(2).replace('.', ',')}</p>
@@ -150,7 +150,12 @@ function Pedido() {
             {role === 'EMPLOYEE' && (
                 <>
                     <Container customClass="nonuser_container">
-                        <h1 className={styles.title}>Pedidos Recebidos</h1>
+                        <h2 style={{
+                            color: '#000',
+                            margin: '1em 0 1em 0',
+                            fontSize: '1.5em',
+                            fontWeight: 'bold'
+                        }} className="mb-0">Pedidos Recebidos</h2>
                         <PedidoFilter filtro={filtro} setFiltro={setFiltro} />
                         <div className={styles.order_list}>
                             {pedidosFiltrados.map(order => (

@@ -1,6 +1,10 @@
 .filters_content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2em;
+    width: 100%;
+    max-width: 300px;
+    margin: 1rem auto;
+}
+
+.select {
+    font-weight: 400;
+    padding: 0.5rem;
 }

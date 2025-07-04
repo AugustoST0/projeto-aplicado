@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import styles from './ProdutoModal.module.css';
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 
-import ControlButton from './ControlButton';
-
-function ProdutoModal({ produto, onClose, onSave }) {
+function ProdutoModal({ produto, onClose, onSave, showCustomPopup }) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
@@ -27,9 +25,43 @@ function ProdutoModal({ produto, onClose, onSave }) {
     }, [produto]);
 
     const handleSubmit = () => {
+        // validação de campos
+        if (
+            name.trim() === '' ||
+            description.trim() === '' ||
+            price === '' ||
+            stock === '' ||
+            category.trim() === ''
+        ) {
+            showCustomPopup({
+                title: 'Campos obrigatórios',
+                description: 'Preencha todos os campos antes de salvar.'
+            });
+            return;
+        }
+
+        // validação de alteração
+        if (produto) {
+            const noChanges =
+                produto.name === name.trim() &&
+                produto.description === description.trim() &&
+                parseFloat(produto.price) === parseFloat(price) &&
+                parseInt(produto.stock) === parseInt(stock) &&
+                produto.category === category;
+
+            if (noChanges) {
+                showCustomPopup({
+                    title: 'Nenhuma alteração detectada',
+                    description: 'Nenhum dado foi modificado. Edite algo antes de salvar.'
+                });
+                return;
+            }
+        }
+
+        // dados prontos
         const produtoData = {
-            name,
-            description,
+            name: name.trim(),
+            description: description.trim(),
             price: parseFloat(price),
             stock: parseInt(stock),
             category,
@@ -43,60 +75,84 @@ function ProdutoModal({ produto, onClose, onSave }) {
     };
 
     return (
-        <div className={styles.overlay}>
-            <div className={styles.modal_content}>
-                <div className={styles.modal_header}>
-                    <h3>{produto ? 'Editar Produto' : 'Adicionar Produto'}</h3>
-                </div>
-                <div className={styles.form_group}>
-                    <label>Nome do Produto</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div className={styles.form_group}>
-                    <label>Descrição</label>
-                    <input
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </div>
-                <div className={styles.form_group}>
-                    <label>Preço</label>
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                    />
-                </div>
-                <div className={styles.form_group}>
-                    <label>Categoria</label>
-                    <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                        <option value="">Selecione uma categoria</option>
-                        <option value="LANCHES">Lanches</option>
-                        <option value="SALGADOS">Salgados</option>
-                        <option value="BEBIDAS">Bebidas</option>
-                        <option value="COMBOS">Combos</option>
-                    </select>
-                </div>
-                <div className={styles.form_group}>
-                    <label>Estoque</label>
-                    <input
-                        type="number"
-                        value={stock}
-                        min={0}
-                        onChange={(e) => setStock(e.target.value)}
-                    />
-                </div>
-                <div className={styles.modal_actions}>
-                    <ControlButton variant="action_button" handleClick={onClose} text="Cancelar" />
-                    <ControlButton variant="action_button" handleClick={handleSubmit} text="Salvar" />
-                </div>
-            </div>
-        </div>
+        <Modal show onHide={onClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>{produto ? 'Editar Produto' : 'Adicionar Produto'}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Nome do Produto</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Descrição</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Row className="mb-3">
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>Preço</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    min={0}
+                                    step="0.01"
+                                    value={price}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value === '' || parseFloat(value) >= 0) {
+                                            setPrice(value);
+                                        }
+                                    }}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>Estoque</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    min={0}
+                                    step="1"
+                                    value={stock}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value === '' || parseInt(value) >= 0) {
+                                            setStock(value);
+                                        }
+                                    }}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Form.Group>
+                        <Form.Label>Categoria</Form.Label>
+                        <Form.Select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
+                            <option value="">Selecione uma categoria</option>
+                            <option value="LANCHES">Lanches</option>
+                            <option value="SALGADOS">Salgados</option>
+                            <option value="BEBIDAS">Bebidas</option>
+                            <option value="COMBOS">Combos</option>
+                        </Form.Select>
+                    </Form.Group>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={onClose}>Cancelar</Button>
+                <Button variant="primary" onClick={handleSubmit}>Salvar</Button>
+            </Modal.Footer>
+        </Modal>
     );
 }
 
